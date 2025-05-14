@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %>Personal library manager</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style>
+      body {
+        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      h1 {
+        color: #2d3a4b;
+        font-size: 2.5rem;
+        margin-bottom: 0.5em;
+        letter-spacing: 2px;
+      }
+      p {
+        color: #4b5563;
+        font-size: 1.2rem;
+        margin-bottom: 2em;
+      }
+      .login-choice {
+        display: flex;
+        gap: 2em;
+        margin-top: 1em;
+      }
+      .login-choice a {
+        display: inline-block;
+        padding: 0.8em 2em;
+        background: #2563eb;
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+        transition: background 0.2s, transform 0.2s;
+      }
+      .login-choice a:hover {
+        background: #1e40af;
+        transform: translateY(-2px) scale(1.04);
+      }
+    </style>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to the Personal Book Manager</p>
+    <div class="login-choice">
+      <a href="/users/login">User Login</a>
+      <a href="/admin/login">Admin Login</a>
+    </div>
+  </body>
+</html>
