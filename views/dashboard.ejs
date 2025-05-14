@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Book Manager - Home</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src="/javascripts/axios.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(120deg, #f0f4f8 0%, #dbeafe 100%);
+      font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+      margin: 0;
+      padding: 2em;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    .header h2 {
+      color: #2563eb;
+      margin-bottom: 0.3em;
+    }
+
+    .header a {
+      margin: 0 1em;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .header a:hover {
+      color: #1e40af;
+      text-decoration: underline;
+    }
+
+    .main-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 2em;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: flex-start;
+    }
+
+    #searchForm {
+      background: #ffffff;
+      padding: 1.5em;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+
+    #searchForm .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #searchForm input[type="text"] {
+      flex-grow: 1;
+      padding: 0.6em;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    #searchForm button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.6em 1em;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    #searchForm button:hover {
+      background: #1e40af;
+      transform: scale(1.03);
+    }
+
+    #results {
+      margin-top: 1em;
+    }
+
+    .book-card, .mybook-card {
+      display: flex;
+      gap: 15px;
+      padding: 1em;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      margin: 0.8em 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      align-items: center;
+    }
+
+    .book-card img, .mybook-card img {
+      border-radius: 6px;
+    }
+
+    .book-info {
+      flex: 1;
+    }
+
+    .book-info b {
+      color: #111827;
+      font-size: 1.1rem;
+    }
+
+    .book-info p {
+      margin: 0.4em 0;
+      color: #4b5563;
+    }
+
+    .book-card button, .mybook-card button {
+      padding: 0.4em 0.8em;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+
+    .book-card button:hover, .mybook-card button:hover {
+      background: #1e40af;
+    }
+
+    .favorites-section {
+      flex: 1;
+      background: #ffffff;
+      padding: 1.5em;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .favorites-section h3 {
+      color: #374151;
+      font-size: 1.2rem;
+      margin-bottom: 1em;
+      text-align: center;
+    }
+
+    #searchForm select {
+    padding: 0.6em 1em;
+    font-size: 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #374151;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 8l4 4 4-4' stroke='%2363748b' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    padding-right: 2.5em;
+  }
+
+  #searchForm select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  }
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>Welcome, <%= user.user_name %>!</h2>
+    <a href="/users/profile">Profile</a> | 
+    <a href="/users/logout">Logout</a>
+  </div>
+
+  <div class="main-container">
+    <!-- Search Section -->
+    <form id="searchForm">
+      <div class="row">
+        <input type="text" id="keyword" placeholder="Enter keywords such as book title or author" required />
+        <select id="searchType">
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+        </select>
+        <button type="submit">Search</button>
+      </div>
+      <div class="row">
+        <button type="button" onclick="setSort('')" id="sortDefault" style="color:#ff4d00;">Comprehensive Sort</button>
+        <button type="button" onclick="setSort('publishedDate')" id="sortPublished">Publication Date</button>
+        <button type="button" onclick="setSort('title')" id="sortTitle">Title Relevance</button>
+      </div>
+      <div id="results"></div>
+    </form>
+
+    <!-- Favorites Section -->
+    <div class="favorites-section">
+      <h3>My Favorites</h3>
+      <div id="mybooks"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentSort = '';
+    let descLenMin = 0;
+    let descLenMax = 0;
+
+    function setSort(s) {
+      currentSort = s;
+      highlightSortBtn(s);
+      document.getElementById('searchForm').onsubmit();
+    }
+
+    function highlightSortBtn(s) {
+      document.getElementById('sortDefault').style.color = s === '' ? '#ff4d00' : '';
+      document.getElementById('sortPublished').style.color = s === 'publishedDate' ? '#ff4d00' : '';
+      document.getElementById('sortTitle').style.color = s === 'title' ? '#ff4d00' : '';
+    }
+
+    document.getElementById('searchForm').onsubmit = async function(e) {
+      if (e) e.preventDefault();
+      const keyword = document.getElementById('keyword').value;
+      const searchType = document.getElementById('searchType').value;
+      const res = await axios.post('/users/search_books', {
+        keyword,
+        searchType,
+        sortBy: currentSort,
+        descLenMin,
+        descLenMax
+      });
+      const books = res.data.items || [];
+      let html = '';
+      books.forEach(book => {
+        const info = book.volumeInfo;
+        html += `<div class="book-card">
+          <img src='${info.imageLinks?.thumbnail || ''}' width='80' />
+          <div class="book-info">
+            <b>${info.title}</b>
+            <p>作者：${(info.authors || []).join(', ')}</p>
+            <button onclick='collectBook("${book.id}")'>收藏</button>
+          </div>
+        </div>`;
+      });
+      document.getElementById('results').innerHTML = html;
+    };
+
+    async function collectBook(bookId) {
+      const res = await axios.post('/users/collect_book', { bookId });
+      alert(res.data.message || '已收藏！');
+      loadMyBooks();
+    }
+
+    async function loadMyBooks() {
+      const res = await axios.get('/users/mybooks');
+      const books = res.data.books || [];
+      let html = '';
+      books.forEach(book => {
+        html += `<div class="mybook-card">
+          <img src='${book.cover_image || book.cover || ''}' width='60' />
+          <div class="book-info">
+            <b>${book.title}</b>
+            <p>${book.authors}</p>
+            <button onclick='removeBook("${book.book_id}")'>移除</button>
+          </div>
+        </div>`;
+      });
+      document.getElementById('mybooks').innerHTML = html;
+    }
+
+    async function removeBook(bookId) {
+      await axios.post('/users/remove_book', { bookId });
+      loadMyBooks();
+    }
+
+    loadMyBooks();
+  </script>
+</body>
+</html>
