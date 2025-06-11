@@ -3,17 +3,40 @@
   <head>
     <title><%= title %>Personal library manager</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/theme.js"></script>
     <style>
-      body {
-        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
-        min-height: 100vh;
-        margin: 0;
-        font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
+      body { 
+      background: var(--main-bg); color: var(--main-text); 
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+    }
+
+    .theme-switcher {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .theme-btn {
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--input-border, #ccc);
+      background: var(--input-bg, #fff);
+      color: var(--main-text, #232946);
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-btn.active,
+    .theme-btn:focus {
+      background: var(--primary, #2563eb);
+      color: #fff;
+    }
+
       h1 {
         color: #2d3a4b;
         font-size: 2.5rem;
@@ -33,7 +56,7 @@
       .login-choice a {
         display: inline-block;
         padding: 0.8em 2em;
-        background: #2563eb;
+        background: var(--primary);
         color: #fff;
         border-radius: 8px;
         text-decoration: none;
@@ -43,17 +66,47 @@
         transition: background 0.2s, transform 0.2s;
       }
       .login-choice a:hover {
-        background: #1e40af;
+        background: var(--primary);
         transform: translateY(-2px) scale(1.04);
+      }
+      .center-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
       }
     </style>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to the Personal Book Manager</p>
-    <div class="login-choice">
-      <a href="/users/login">User Login</a>
-      <a href="/admin/login">Admin Login</a>
+    <div class="theme-switcher">
+      <button class="theme-btn" onclick="toggleTheme('light')">Light</button>
+      <button class="theme-btn" onclick="toggleTheme('dark')">Dark</button>
     </div>
+    <div class="center-container">
+      <h1><%= title %></h1>
+      <p>Welcome to the Personal Book Manager</p>
+      <div class="login-choice">
+        <a href="/users/login">User Login</a>
+        <a href="/admin/login">Admin Login</a>
+      </div>
+    </div>
+    <script>
+      function toggleTheme(mode) {
+        if (!mode) {
+          mode = document.body.classList.contains('dark') ? 'light' : 'dark';
+        }
+        if (mode === 'dark') {
+          document.body.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          document.body.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+        }
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.textContent.includes(mode === 'dark' ? 'dark' : 'light'));
+        });
+      }
+    </script>
   </body>
 </html>

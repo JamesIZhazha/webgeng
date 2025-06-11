@@ -100,9 +100,9 @@ router.post('/search_books', async (req, res) => {
   }
   const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}`;
   try {
-    // const agent = new HttpsProxyAgent('http://127.0.0.1:7890');
-    // const result = await axios.get(url, { httpsAgent: agent });
-    const result = await axios.get(url);
+    const agent = new HttpsProxyAgent('http://127.0.0.1:7890');
+    const result = await axios.get(url, { httpsAgent: agent });
+    // const result = await axios.get(url);
     let items = result.data.items || [];
     if (sortBy === 'title') {
       items = items.sort((a, b) => {
@@ -137,9 +137,9 @@ router.post('/collect_book', async (req, res) => {
   // Get book details
   const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
   try {
-    // const agent = new HttpsProxyAgent('http://127.0.0.1:7890');
-    // const result = await axios.get(url, { httpsAgent: agent });
-    const result = await axios.get(url);
+    const agent = new HttpsProxyAgent('http://127.0.0.1:7890');
+    const result = await axios.get(url, { httpsAgent: agent });
+    // const result = await axios.get(url);
     if (result.status !== 200 || !result.data.volumeInfo) {
       throw new Error('Invalid book API response');
     }
@@ -169,10 +169,18 @@ router.post('/collect_book', async (req, res) => {
 router.get('/mybooks', async (req, res) => {
   if (!req.session.user) return res.json({ books: [] });
   const [rows] = await db.query(
-    'SELECT b.book_id, b.title, b.authors, b.cover_image FROM Books b JOIN UserBooks u ON b.book_id=u.book_id WHERE u.user_id=?',
+    'SELECT b.book_id, b.title, b.authors, b.cover_image, u.tags, u.rating, u.notes FROM Books b JOIN UserBooks u ON b.book_id=u.book_id WHERE u.user_id=?',
     [req.session.user.user_id]
   );
   res.json({ books: rows });
+});
+
+// Update collection info (tags, rating, notes)
+router.post('/update_book', async (req, res) => {
+  if (!req.session.user) return res.json({ success: false });
+  const { bookId, tags, rating, notes } = req.body;
+  await db.query('UPDATE UserBooks SET tags=?, rating=?, notes=? WHERE user_id=? AND book_id=?', [tags, rating, notes, req.session.user.user_id, bookId]);
+  res.json({ success: true });
 });
 
 // Remove collection

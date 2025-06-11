@@ -5,12 +5,33 @@
   <title>Book Manager - Home</title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <script src="/javascripts/axios.min.js"></script>
+  <script src="/javascripts/theme.js"></script>
   <style>
-    body {
-      background: linear-gradient(120deg, #f0f4f8 0%, #dbeafe 100%);
-      font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
-      margin: 0;
-      padding: 2em;
+    body { background: var(--main-bg); color: var(--main-text); }
+
+    .theme-switcher {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .theme-btn {
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--input-border, #ccc);
+      background: var(--input-bg, #fff);
+      color: var(--main-text, #232946);
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-btn.active,
+    .theme-btn:focus {
+      background: var(--primary, #2563eb);
+      color: #fff;
     }
 
     .header {
@@ -19,20 +40,20 @@
     }
 
     .header h2 {
-      color: #2563eb;
+      color: var(--primary);
       margin-bottom: 0.3em;
     }
 
     .header a {
       margin: 0 1em;
-      color: #2563eb;
+      color: var(--primary);
       text-decoration: none;
       font-weight: 500;
       transition: color 0.2s;
     }
 
     .header a:hover {
-      color: #1e40af;
+      color: var(--primary);
       text-decoration: underline;
     }
 
@@ -46,7 +67,7 @@
     }
 
     #searchForm {
-      background: #ffffff;
+      
       padding: 1.5em;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -72,8 +93,8 @@
     }
 
     #searchForm button {
-      background: #2563eb;
-      color: white;
+      background: var(--primary);
+
       border: none;
       padding: 0.6em 1em;
       border-radius: 8px;
@@ -83,7 +104,7 @@
     }
 
     #searchForm button:hover {
-      background: #1e40af;
+      background: var(--primary);
       transform: scale(1.03);
     }
 
@@ -95,7 +116,7 @@
       display: flex;
       gap: 15px;
       padding: 1em;
-      background: #fff;
+
       border: 1px solid #e5e7eb;
       border-radius: 10px;
       margin: 0.8em 0;
@@ -123,8 +144,8 @@
 
     .book-card button, .mybook-card button {
       padding: 0.4em 0.8em;
-      background: #2563eb;
-      color: white;
+      background: var(--primary);
+
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -133,12 +154,12 @@
     }
 
     .book-card button:hover, .mybook-card button:hover {
-      background: #1e40af;
+      background: var(--primary);
     }
 
     .favorites-section {
       flex: 1;
-      background: #ffffff;
+
       padding: 1.5em;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -156,7 +177,7 @@
     font-size: 1rem;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
-    background-color: #ffffff;
+
     color: #374151;
     appearance: none;
     cursor: pointer;
@@ -169,14 +190,96 @@
   }
 
   #searchForm select:focus {
-    border-color: #2563eb;
+    border-color: var(--primary);
     outline: none;
     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  }
+
+  .book-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin: 0.5em 0 0.5em 0;
+    align-items: center;
+  }
+  .field-group {
+    display: flex;
+    align-items: center;
+
+    border-radius: 6px;
+    padding: 0.3em 0.7em;
+    gap: 0.3em;
+  }
+  .field-group label {
+    color: var(--primary);
+    font-weight: 500;
+    margin-right: 0.2em;
+  }
+  .input-tag, .input-rating, .input-notes {
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    padding: 0.3em 0.7em;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .input-rating {
+    width: 50px;
+  }
+  .input-notes {
+    width: 120px;
+  }
+  .input-tag:focus, .input-rating:focus, .input-notes:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  }
+  .save-btn {
+    background: #22c55e;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4em 1.2em;
+    margin-left: 1em;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .save-btn:hover {
+    background: #16a34a;
+  }
+  .book-actions {
+    display: flex;
+    gap: 1em;
+    margin-top: 0.5em;
+  }
+  .save-btn, .remove-btn {
+    flex: 1 1 0;
+    min-width: 80px;
+    background: #22c55e;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4em 1.2em;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+  }
+  .remove-btn {
+    background: #ef4444;
+  }
+  .save-btn:hover {
+    background: #16a34a;
+  }
+  .remove-btn:hover {
+    background: #b91c1c;
   }
 
   </style>
 </head>
 <body>
+  <div class="theme-switcher">
+    <button class="theme-btn" onclick="toggleTheme('light')">Light</button>
+    <button class="theme-btn" onclick="toggleTheme('dark')">Dark</button>
+  </div>
   <div class="header">
     <h2>Welcome, <%= user.user_name %>!</h2>
     <a href="/users/profile">Profile</a> | 
@@ -220,6 +323,34 @@
       document.getElementById('searchForm').onsubmit();
     }
 
+    function toggleTheme(mode) {
+      if (!mode) {
+        mode = document.body.classList.contains('dark') ? 'light' : 'dark';
+      }
+      if (mode === 'dark') {
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.includes(mode === 'dark' ? 'dark' : 'light'));
+      });
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      const theme = localStorage.getItem('theme') || 'light';
+      if (theme === 'dark') document.body.classList.add('dark');
+      const btns = document.querySelectorAll('.theme-btn');
+      btns.forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.includes(theme === 'dark' ? 'dark' : 'light'));
+      });
+    });
+
+    function displayBooks(books) {
+      
+    }
+
     function highlightSortBtn(s) {
       document.getElementById('sortDefault').style.color = s === '' ? '#ff4d00' : '';
       document.getElementById('sortPublished').style.color = s === 'publishedDate' ? '#ff4d00' : '';
@@ -245,8 +376,8 @@
           <img src='${info.imageLinks?.thumbnail || ''}' width='80' />
           <div class="book-info">
             <b>${info.title}</b>
-            <p>作者：${(info.authors || []).join(', ')}</p>
-            <button onclick='collectBook("${book.id}")'>收藏</button>
+            <p>Author：${(info.authors || []).join(', ')}</p>
+            <button onclick='collectBook("${book.id}")'>Collect</button>
           </div>
         </div>`;
       });
@@ -255,7 +386,7 @@
 
     async function collectBook(bookId) {
       const res = await axios.post('/users/collect_book', { bookId });
-      alert(res.data.message || '已收藏！');
+      alert(res.data.message || 'Already collected！');
       loadMyBooks();
     }
 
@@ -269,14 +400,45 @@
           <div class="book-info">
             <b>${book.title}</b>
             <p>${book.authors}</p>
-            <button onclick='removeBook("${book.book_id}")'>移除</button>
+            <div class="book-fields">
+              <div class="field-group">
+                <label>Tag:</label>
+                <input type='text' class='input-tag' value='${book.tags || ''}' onchange='updateField(this, "tags", "${book.book_id}")' />
+              </div>
+              <div class="field-group">
+                <label>Rating:</label>
+                <input type='number' min='1' max='5' class='input-rating' value='${book.rating || ''}' onchange='updateField(this, "rating", "${book.book_id}")' />
+              </div>
+              <div class="field-group">
+                <label>Notes:</label>
+                <input type='text' class='input-notes' value='${book.notes || ''}' onchange='updateField(this, "notes", "${book.book_id}")' />
+              </div>
+            </div>
+            <div class="book-actions">
+              <button class="save-btn" onclick='saveBookInfo("${book.book_id}")'>Save</button>
+              <button class="remove-btn" onclick='removeBook("${book.book_id}")'>Remove</button>
+            </div>
           </div>
         </div>`;
       });
       document.getElementById('mybooks').innerHTML = html;
     }
 
+    function updateField(input, field, bookId) {
+      if (!bookEditCache[bookId]) bookEditCache[bookId] = {};
+      bookEditCache[bookId][field] = input.value;
+    }
+    let bookEditCache = {};
+    async function saveBookInfo(bookId) {
+      const data = bookEditCache[bookId] || {};
+      data.bookId = bookId;
+      await axios.post('/users/update_book', data);
+      alert('Saved successfully');
+      loadMyBooks();
+    }
+
     async function removeBook(bookId) {
+      if (!confirm('Delete this book?')) return;
       await axios.post('/users/remove_book', { bookId });
       loadMyBooks();
     }

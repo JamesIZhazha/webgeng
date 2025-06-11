@@ -1,71 +1,73 @@
-# Personal Library Management System
+# 个人图书管理系统
 
-## Project Overview
-This project is a personal library management system based on Node.js + Express + EJS. It supports user registration, login, profile management, book collection, book search, and admin backend management.
+## 项目简介
+本项目是一个基于 Node.js + Express + EJS 的个人图书管理系统，支持用户注册、登录、个人资料管理、图书收藏、书籍搜索、管理员后台管理等功能。
 
-## Database Initialization and Operations
-1. **Database Structure**:
-   - The database script is located in the `database_schema.sql` file.
-   - It includes three main tables: Users (user table), Books (book table), UserBooks (user book collection table), and an admin identifier field.
-2. **Execute Database Script**:
-   - Use a MySQL client or visualization tool to execute the `database_schema.sql` file:
+## 数据库初始化与操作
+1. **数据库结构**：
+   - 数据库脚本位于 `database_schema.sql` 文件。
+   - 包含三张主要表：Users（用户表）、Books（图书表）、UserBooks（用户图书收藏表），以及管理员标识字段。
+2. **执行数据库脚本**：
+   - 使用 MySQL 客户端或可视化工具执行 `database_schema.sql` 文件：
      ```sql
      source /path/to/database_schema.sql;
      ```
-   - Ensure the database is created and switched to the target database.
+   - 确保已创建数据库并切换到目标数据库。
 
-## Code Database Configuration
-1. **Database Configuration File**:
-   - The database connection configuration is in the `db.js` file.
-   - Modify the following content to match your database environment:
+## 代码数据库配置修改
+右键新建数据库，根据图片创建后 再右键选择运行SQL文件即可。
+![alt text](image.png)
+
+1. **数据库配置文件**：
+   - 数据库连接配置在 `db.js` 文件中。
+   - 修改如下内容以适配你的数据库环境：
      ```js
      // ... existing code ...
      const pool = mysql.createPool({
-       host: 'localhost', // Database host
-       user: 'your_mysql_user', // Database username
-       password: 'your_mysql_password', // Database password
-       database: 'your_database_name', // Database name
-       // ... other configurations ...
+       host: 'localhost', // 数据库主机
+       user: 'your_mysql_user', // 数据库用户名
+       password: 'your_mysql_password', // 数据库密码
+       database: 'your_database_name', // 数据库名
+       // ... 其他配置 ...
      });
      // ... existing code ...
      ```
 
-## Project Startup and Running
-1. **Start the Project**:
+## 项目启动与运行
+1. **启动项目**：
    - npm start
-2. **Access Address**:
-   - Default at http://localhost:3000/
+2. **访问地址**：
+   - 默认在 http://localhost:3000/  
 
-## Main Features
+## 主要功能说明
 
-### Login
+### 登录
 
-#### User Login
+#### 用户登录
 
-Username: 111@qq.com
+用户名：111@qq.com
 
-Password: 111
+密码：111
 
-#### Admin Login
+#### 管理员登录
 
-Username: admin@qq.com
+用户名：admin@qq.com
 
-Password: admin
+密码：admin
 
-### User Features:
-- User registration, login, logout  
-  - Related code: `routes/users.js` (registration, login, logout endpoints), `views/login.ejs`, `views/register.ejs` (frontend pages), `views/profile.ejs` (profile page)
-- View and edit personal profile (username, avatar, password)  
-  - Related code: `routes/users.js` (profile retrieval and update endpoints), `views/profile.ejs` (profile edit page)
-- Book search (by title, author, supports sorting)  
-  - Related code: `routes/users.js` (search-related endpoints), `views/dashboard.ejs` (search and display page)
-- Collect books, add tags, notes, ratings, reading status  
-  - Related code: `routes/users.js` (collection, tags, notes, ratings, status endpoints), `views/dashboard.ejs` (collection and operation interface)
-- View and manage personal collections  
-  - Related code: `routes/users.js` (retrieve personal collection endpoint), `views/dashboard.ejs` (collection display)
-
-### Admin Features:
-- Admin login, logout  
-  - Related code: `routes/admin.js` (admin login, logout endpoints), `views/admin_login.ejs` (login page)
-- User management (view, edit, delete users, set admin permissions)  
-  - Related code: `routes/admin.js` (user management endpoints), `views/admin_users.ejs` (user management page), `views/admin_edit_user.ejs` (edit user page)
+### 用户端功能：
+- 用户注册、登录、登出  
+  - 相关代码：`routes/users.js`（注册、登录、登出接口），`views/login.ejs`、`views/register.ejs`（前端页面），`views/profile.ejs`（个人信息页）
+- 个人资料查看与修改（用户名、头像、密码）  
+  - 相关代码：`routes/users.js`（资料获取与修改接口），`views/profile.ejs`（资料编辑页面）
+- 图书搜索（按书名、作者，支持排序）  
+  - 相关代码：`routes/users.js`（搜索相关接口），`views/dashboard.ejs`（搜索与展示页面）
+- 收藏图书、添加标签、笔记、评分、阅读状态  
+  - 相关代码：`routes/users.js`（收藏、标签、笔记、评分、状态接口），`views/dashboard.ejs`（收藏与操作界面）
+- 查看和管理个人收藏  
+  - 相关代码：`routes/users.js`（获取个人收藏接口），`views/dashboard.ejs`（收藏展示）
+### 管理员端功能：
+- 管理员登录、登出  
+  - 相关代码：`routes/admin.js`（管理员登录、登出接口），`views/admin_login.ejs`（登录页面）
+- 用户管理（查看、编辑、删除用户，设置管理员权限）  
+  - 相关代码：`routes/admin.js`（用户管理接口），`views/admin_users.ejs`（用户管理页面），`views/admin_edit_user.ejs`（编辑用户页面）

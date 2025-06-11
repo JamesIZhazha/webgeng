@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <title>Admin Login</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="/javascripts/theme.js"></script>
   <style>
-    body {
-      background: linear-gradient(120deg, #f0f4f8 0%, #dbeafe 100%);
+
+    body { 
+      background: var(--main-bg); color: var(--main-text); 
       min-height: 100vh;
       margin: 0;
       display: flex;
@@ -14,6 +16,32 @@
       justify-content: center;
       font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
     }
+
+    .theme-switcher {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .theme-btn {
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: 1px solid var(--input-border, #ccc);
+      background: var(--input-bg, #fff);
+      color: var(--main-text, #232946);
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .theme-btn.active,
+    .theme-btn:focus {
+      background: var(--primary, #2563eb);
+      color: #fff;
+    }
+
     .login-container {
       background: #fff;
       padding: 2.5em 2em 2em 2em;
@@ -56,7 +84,6 @@
       margin-top: 0.5em;
       padding: 0.7em 0;
       background: #2563eb;
-      color: #fff;
       border: none;
       border-radius: 6px;
       font-size: 1.1rem;
@@ -71,7 +98,6 @@
     .error {
       margin-top: 1em;
       color: #dc2626;
-      background: #fee2e2;
       border-radius: 5px;
       padding: 0.7em 1em;
       font-size: 1rem;
@@ -81,6 +107,10 @@
   </style>
 </head>
 <body>
+  <div class="theme-switcher">
+    <button class="theme-btn" onclick="toggleTheme('light')">Light</button>
+    <button class="theme-btn" onclick="toggleTheme('dark')">Dark</button>
+  </div>
   <div class="login-container">
     <h2>Admin Login</h2>
     <form action="/admin/login" method="post">
@@ -94,5 +124,22 @@
       <div class="error"><%= error %></div>
     <% } %>
   </div>
+  <script>
+    function toggleTheme(mode) {
+      if (!mode) {
+        mode = document.body.classList.contains('dark') ? 'light' : 'dark';
+      }
+      if (mode === 'dark') {
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.includes(mode === 'dark' ? 'dark' : 'light'));
+      });
+    }
+  </script>
 </body>
 </html>
