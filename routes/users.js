@@ -100,9 +100,9 @@ router.post('/search_books', async (req, res) => {
   }
   const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}`;
   try {
-    const agent = new HttpsProxyAgent('http://127.0.0.1:7890');
-    const result = await axios.get(url, { httpsAgent: agent });
-    // const result = await axios.get(url);
+    // const agent = new HttpsProxyAgent('http://127.0.0.1:7890');
+    // const result = await axios.get(url, { httpsAgent: agent });
+    const result = await axios.get(url);
     let items = result.data.items || [];
     if (sortBy === 'title') {
       items = items.sort((a, b) => {
@@ -137,9 +137,9 @@ router.post('/collect_book', async (req, res) => {
   // Get book details
   const url = `https://www.googleapis.com/books/v1/volumes/${bookId}`;
   try {
-    const agent = new HttpsProxyAgent('http://127.0.0.1:7890');
-    const result = await axios.get(url, { httpsAgent: agent });
-    // const result = await axios.get(url);
+    // const agent = new HttpsProxyAgent('http://127.0.0.1:7890');
+    // const result = await axios.get(url, { httpsAgent: agent });
+    const result = await axios.get(url);
     if (result.status !== 200 || !result.data.volumeInfo) {
       throw new Error('Invalid book API response');
     }
